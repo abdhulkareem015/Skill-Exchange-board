@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Skill Request - Skill Exchange</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+        }
+        nav {
+            background-color: #007bff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 400px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        select, input, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ Navigation Bar -->
+    <nav>
+        <div><strong>Skill Exchange</strong></div>
+        <div>
+            <a th:href="@{/home(email=${user.email})}">Home</a>
+            <a th:href="@{/skills/add(email=${user.email})}">Add Skill</a>
+            <a th:href="@{/requests/create(email=${user.email})}">Create Request</a>
+            <a th:href="@{/requests/user(email=${user.email})}">My Requests</a>
+            <a th:href="@{/requests/provider(email=${user.email})}">Received Requests</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Create Skill Exchange Request</h2>
+
+        <!-- ✅ The form automatically includes the user's email -->
+        <form th:action="@{/requests/create}" method="post">
+            <input type="hidden" name="requesterEmail" th:value="${user.email}"/>
+
+            <label>Select Skill:</label>
+            <select name="skillId" required>
+                <option value="">--Select a Skill--</option>
+                <option th:each="skill : ${skills}"
+                        th:value="${skill.skillId}"
+                        th:text="${skill.name + ' (by ' + skill.user.name + ')'}">
+                </option>
+            </select>
+
+            <button type="submit">Send Request</button>
+        </form>
+    </div>
+
+</body>
+</html>

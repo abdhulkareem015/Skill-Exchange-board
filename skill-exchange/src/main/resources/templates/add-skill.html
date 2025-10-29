@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Skill - Skill Exchange</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #007bff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            margin: 40px auto;
+            width: 400px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        input, select, textarea, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div><strong>Skill Exchange</strong></div>
+        <div>
+            <a th:href="@{/home}">Home</a>
+            <a th:href="@{/skills/add}">Add Skill</a>
+            <a th:href="@{/requests/create}">Create Request</a>
+            <a th:href="@{/requests/view}">Exchange Requests</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Add New Skill</h2>
+
+        <form th:action="@{/skills/add}" method="post" th:object="${skill}">
+            <label>Skill Name:</label>
+            <input type="text" th:field="*{name}" placeholder="Enter skill name" required>
+
+            <label>Description:</label>
+            <textarea th:field="*{description}" rows="3" placeholder="Describe the skill"></textarea>
+
+            <label>Type:</label>
+            <select th:field="*{type}" required>
+                <option value="">--Select--</option>
+                <option value="Offer">Offer (Can Teach)</option>
+                <option value="Request">Request (Want to Learn)</option>
+            </select>
+
+            <!-- Temporary email input (will be auto-filled later when login session added) -->
+            <label>Your Email:</label>
+            <input type="email" name="email" placeholder="Enter your registered email" required>
+
+            <button type="submit">Add Skill</button>
+        </form>
+    </div>
+
+</body>
+</html>

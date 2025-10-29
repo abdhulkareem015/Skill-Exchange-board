@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Skill Exchange - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #007bff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            margin: 30px auto;
+            width: 90%;
+            max-width: 900px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-top: 25px;
+        }
+        .section h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        button, .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-review {
+            background-color: #ff9800;
+        }
+        .btn-review:hover {
+            background-color: #e68900;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div><strong>Skill Exchange</strong></div>
+        <div>
+<a th:href="@{/home(email=${user.email})}">Home</a>
+<a th:href="@{/skills/add(email=${user.email})}">Add Skill</a>
+<a th:href="@{/requests/create(email=${user.email})}">Create Request</a>
+<a th:href="@{/requests/user(email=${user.email})}">My Requests</a>
+<a th:href="@{/requests/provider(email=${user.email})}">Received Requests</a>
+<a th:href="@{'/reviews/user/' + ${user.email}}" class="btn btn-review">View My Reviews</a>
+<a th:href="@{/logout}">Logout</a>
+
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Welcome, <span th:text="${user.name}">User</span>!</h2>
+
+        <!-- My Skills Section -->
+        <div class="section">
+            <h3>My Added Skills</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Skill Name</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Added On</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="skill : ${userSkills}">
+                        <td th:text="${skill.name}"></td>
+                        <td th:text="${skill.description}"></td>
+                        <td th:text="${skill.type}"></td>
+                        <td th:text="${#temporals.format(skill.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(userSkills)}">
+                        <td colspan="4">You haven’t added any skills yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Received Requests Section -->
+        <div class="section">
+            <h3>Requests You Received</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Requester</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="req : ${receivedRequests}">
+                        <td th:text="${req.skill.name}"></td>
+                        <td th:text="${req.requester.name}"></td>
+                        <td th:text="${req.status}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(receivedRequests)}">
+                        <td colspan="3">No received requests.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sent Requests Section -->
+        <div class="section">
+            <h3>Requests You Sent</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Provider</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="req : ${sentRequests}">
+                        <td th:text="${req.skill.name}"></td>
+                        <td th:text="${req.provider.name}"></td>
+                        <td th:text="${req.status}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(sentRequests)}">
+                        <td colspan="3">No sent requests.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

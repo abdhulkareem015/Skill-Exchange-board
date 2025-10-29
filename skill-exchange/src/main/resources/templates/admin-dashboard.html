@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard - Skill Exchange</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #343a40;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            margin: 30px auto;
+            width: 90%;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin-top: 25px;
+        }
+        .section h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div><strong>Skill Exchange Admin</strong></div>
+    <div>
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>Admin Dashboard</h2>
+
+    <!-- Users Section -->
+    <div class="section">
+        <h3>Registered Users</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.name}"></td>
+                    <td th:text="${u.email}"></td>
+                    <td th:text="${u.role}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(users)}">
+                    <td colspan="3">No users found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="section">
+        <h3>All Skills</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Skill</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Added By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="s : ${skills}">
+                    <td th:text="${s.name}"></td>
+                    <td th:text="${s.type}"></td>
+                    <td th:text="${s.description}"></td>
+                    <td th:text="${s.user.name}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(skills)}">
+                    <td colspan="4">No skills available.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Requests Section -->
+    <div class="section">
+        <h3>Exchange Requests</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Requester</th>
+                    <th>Provider</th>
+                    <th>Skill</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="r : ${requests}">
+                    <td th:text="${r.requester.name}"></td>
+                    <td th:text="${r.provider.name}"></td>
+                    <td th:text="${r.skill.name}"></td>
+                    <td th:text="${r.status}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(requests)}">
+                    <td colspan="4">No requests found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="section">
+        <h3>All Reviews</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Reviewer</th>
+                    <th>Reviewee</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="rev : ${reviews}">
+                    <td th:text="${rev.reviewer.name}"></td>
+                    <td th:text="${rev.reviewee.name}"></td>
+                    <td th:text="${rev.rating}"></td>
+                    <td th:text="${rev.comment}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(reviews)}">
+                    <td colspan="4">No reviews available.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Reviews - Skill Exchange</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #007bff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 85%;
+            margin: 30px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #007bff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        td {
+            background-color: #fafafa;
+        }
+        .rating {
+            color: #ff9800;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div><strong>Skill Exchange</strong></div>
+    <div>
+        <a th:href="@{/home(email=${reviewedUser.email})}">Home</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2 th:text="'Reviews for ' + ${reviewedUser.name}"></h2>
+
+    <table th:if="${not #lists.isEmpty(reviews)}">
+        <thead>
+            <tr>
+                <th>Reviewer</th>
+                <th>Rating</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="rev : ${reviews}">
+                <td th:text="${rev.reviewer.name}"></td>
+                <td class="rating" th:text="${rev.rating + ' ★'}"></td>
+                <td th:text="${rev.comment}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(reviews)}">No reviews found for this user yet.</p>
+</div>
+
+</body>
+</html>

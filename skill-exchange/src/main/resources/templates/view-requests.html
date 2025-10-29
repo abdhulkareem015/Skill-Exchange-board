@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Skill Exchange Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        nav {
+            background-color: #007bff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            margin: 30px auto;
+            width: 85%;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+        td {
+            padding: 10px;
+        }
+        button, .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        button.reject { background-color: #dc3545; }
+        button.complete { background-color: #28a745; }
+        .btn-review { background-color: #ff9800; }
+        button:hover, .btn:hover { opacity: 0.85; }
+        .status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ NAVBAR FIX -->
+    <nav>
+        <div><strong>Skill Exchange</strong></div>
+        <div>
+            <a th:href="@{/home(email=${user.email})}">Home</a>
+            <a th:href="@{/skills/add(email=${user.email})}">Add Skill</a>
+            <a th:href="@{/requests/create(email=${user.email})}">Create Request</a>
+            <a th:href="@{/requests/user(email=${user.email})}">My Requests</a>
+            <a th:href="@{/requests/provider(email=${user.email})}">Received Requests</a>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 th:text="${viewType == 'sent' ? 'Requests You Sent' : 'Requests You Received'}"></h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Skill</th>
+                    <th th:text="${viewType == 'sent' ? 'Provider' : 'Requester'}"></th>
+                    <th>Status</th>
+                    <th>Requested At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="req : ${requests}">
+                    <td th:text="${req.skill.name}"></td>
+                    <td th:text="${viewType == 'sent' ? req.provider.name : req.requester.name}"></td>
+                    <td class="status" th:text="${req.status}"></td>
+                    <td th:text="${#temporals.format(req.requestedAt, 'dd-MM-yyyy HH:mm')}"></td>
+
+                    <td>
+                        <!-- Provider Actions -->
+                        <div th:if="${viewType == 'received'}">
+                            <form th:action="@{/requests/updateStatus}" method="post" style="display:inline;">
+                                <input type="hidden" name="requestId" th:value="${req.requestId}">
+                                <input type="hidden" name="userEmail" th:value="${user.email}">
+                                <button name="action" value="accept" type="submit">Accept</button>
+                            </form>
+                            <form th:action="@{/requests/updateStatus}" method="post" style="display:inline;">
+                                <input type="hidden" name="requestId" th:value="${req.requestId}">
+                                <input type="hidden" name="userEmail" th:value="${user.email}">
+                                <button name="action" value="reject" type="submit" class="reject">Reject</button>
+                            </form>
+                            <form th:action="@{/requests/updateStatus}" method="post" style="display:inline;">
+                                <input type="hidden" name="requestId" th:value="${req.requestId}">
+                                <input type="hidden" name="userEmail" th:value="${user.email}">
+                                <button name="action" value="complete" type="submit" class="complete">Complete</button>
+                            </form>
+                        </div>
+
+                        <!-- Requester Review Option -->
+                        <div th:if="${viewType == 'sent' and req.status.name() == 'COMPLETED'}">
+                            <a th:href="@{'/reviews/add/' + ${req.requestId}}" class="btn btn-review">Leave Review</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

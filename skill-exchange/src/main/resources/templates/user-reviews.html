@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Reviews</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 0; }
+        nav { background-color: #007bff; padding: 15px; color: white; display: flex; justify-content: space-between; }
+        nav a { color: white; text-decoration: none; margin: 0 10px; }
+        .container { width: 80%; margin: 30px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        h2 { color: #007bff; }
+    </style>
+</head>
+<body>
+<nav>
+    <div><strong>Skill Exchange</strong></div>
+    <div>
+        <a th:href="@{/home(email=${user.email})}">Home</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>User Reviews</h2>
+    <p>This is the User Reviews page — build your review list here.</p>
+</div>
+</body>
+</html>
